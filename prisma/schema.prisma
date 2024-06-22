@@ -1,0 +1,270 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+// tabla de usuarios
+model Usuarios {
+  id                  String                    @id @default(uuid())
+  nombre              String                    @db.VarChar(50)
+  apellido            String                    @db.VarChar(50)
+  correo              String                    @unique @db.VarChar(100)
+  clave               String                    @db.VarChar(90)
+  rol                 RolUsuario                @default(publico)
+  foto                String                    @db.VarChar(100)
+  foto_id             String?                   @db.Char(200)
+  fecha_nacimiento    DateTime?                 @db.Date
+  genero              Genero?
+  estado              EstadoUsuario             @default(activo)
+  fecha_creacion      DateTime                  @default(now())
+  fecha_actualizacion DateTime                  @updatedAt
+  asociaciones        Asociaciones?
+  comentarios         Comentarios[]
+  reacciones          ReaccionesPublicaciones[]
+  telefonos           TelefonosUsuario[]
+  direcciones         DireccionesUsuario[]
+
+  @@index([correo, id], name: "correo_id_user")
+}
+
+enum RolUsuario {
+  publico
+  admin_asoc
+  admin
+}
+
+enum Genero {
+  masculino
+  femenino
+  otro
+}
+
+enum EstadoUsuario {
+  activo
+  inactivo
+  suspendido
+}
+
+model TelefonosUsuario {
+  id                  String   @id @default(uuid())
+  usuario_id          String   @db.Char(36)
+  numero              String   @db.VarChar(20)
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+  usuario             Usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@index([usuario_id, numero], name: "telefonos_usuarios_numero")
+}
+
+model DireccionesUsuario {
+  id                  String   @id @default(uuid())
+  usuario_id          String   @db.Char(36)
+  direccion           String   @db.VarChar(150)
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+  usuario             Usuarios @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@index([usuario_id, direccion], name: "direcciones_usuarios_direccion")
+}
+
+// tabla de asociaciones
+model Asociaciones {
+  id                  String                  @id @default(uuid())
+  admin_id            String                  @unique @db.Char(36)
+  nombre              String                  @db.VarChar(100)
+  descripcion         String                  @db.Text
+  correo              String                  @unique @db.VarChar(100)
+  foto                String                  @db.VarChar(100)
+  foto_id             String?                 @db.Char(200)
+  fecha_creacion      DateTime                @default(now())
+  fecha_actualizacion DateTime                @updatedAt
+  usuarios            Usuarios                @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+  redesSociales       RedSocialAsociaciones[]
+  publicaciones       Publicaciones[]
+  anuncios            Anuncios[]
+  miembrosAsociacion  MiembrosAsociacion[]
+  reuniones           Reuniones[]
+  telefonos           TelefonosAsociacion[]
+  direcciones         DireccionesAsociacion[]
+}
+
+model TelefonosAsociacion {
+  id                  String       @id @default(uuid())
+  asociacion_id       String       @db.Char(36)
+  numero              String       @db.VarChar(20)
+  fecha_creacion      DateTime     @default(now())
+  fecha_actualizacion DateTime     @updatedAt
+  asociacion          Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+
+  @@index([asociacion_id, numero], name: "telefonos_asociacion_numero")
+}
+
+model DireccionesAsociacion {
+  id                  String       @id @default(uuid())
+  asociacion_id       String       @db.Char(36)
+  direccion           String       @db.VarChar(150)
+  fecha_creacion      DateTime     @default(now())
+  fecha_actualizacion DateTime     @updatedAt
+  asociacion          Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+
+  @@index([asociacion_id, direccion], name: "direcciones_asociacion_direccion")
+}
+
+// tabla de redes sociales de asociaciones
+model RedSocialAsociaciones {
+  id                  String        @id @default(uuid())
+  asociacion_id       String        @unique @db.Char(36)
+  tipo                TipoRedSocial
+  url                 String        @db.VarChar(100)
+  fecha_creacion      DateTime      @default(now())
+  fecha_actualizacion DateTime      @updatedAt
+  asociacion          Asociaciones  @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+}
+
+enum TipoRedSocial {
+  facebook
+  x
+  instagram
+  website
+  whatsapp
+}
+
+// tabla publicaciones
+model Publicaciones {
+  id                  String                    @id @default(uuid())
+  asociacion_id       String                    @db.Char(36)
+  titulo              String?                   @db.VarChar(100)
+  texto_uno           String?                   @db.Text
+  texto_dos           String?                   @db.Text
+  imagen_uno          String?                   @db.VarChar(100)
+  imagen_dos          String?                   @db.VarChar(100)
+  imagen_uno_id       String?                   @db.Char(200)
+  imagen_dos_id       String?                   @db.Char(200)
+  fecha_creacion      DateTime                  @default(now())
+  fecha_actualizacion DateTime                  @updatedAt
+  comentarios         Comentarios[]
+  reacciones          ReaccionesPublicaciones[]
+
+  asociacion Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+}
+
+// tabla anuncios
+model Anuncios {
+  id                  String   @id @default(uuid())
+  asociacion_id       String   @db.Char(36)
+  titulo              String   @db.VarChar(100)
+  descripcion         String   @db.Text
+  foto                String?  @db.VarChar(100)
+  foto_id             String?  @db.Char(200)
+  fecha_creacion      DateTime @default(now())
+  fecha_actualizacion DateTime @updatedAt
+
+  asociacion Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+}
+
+// tabla miembros de asociaciones
+model MiembrosAsociacion {
+  id                  String        @id @default(uuid())
+  asociacion_id       String        @db.Char(36)
+  nombre              String        @db.VarChar(50)
+  apellido            String        @db.VarChar(50)
+  correo              String?       @db.VarChar(100)
+  fecha_nacimiento    DateTime?     @db.Date
+  genero              Genero?
+  telefono            String?       @db.VarChar(20)
+  direccion           String?       @db.VarChar(150)
+  fecha_inscripcion   DateTime      @default(now())
+  estado              EstadoUsuario @default(activo)
+  fecha_creacion      DateTime      @default(now())
+  fecha_actualizacion DateTime      @updatedAt
+  asociacion          Asociaciones  @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+
+  asistencias Asistencias[]
+}
+
+// tabla Reuniones
+model Reuniones {
+  id                  String       @id @default(uuid())
+  asociacion_id       String       @db.Char(36)
+  titulo              String       @db.VarChar(100)
+  descripcion         String       @db.Text
+  fecha               DateTime     @db.Date
+  hora                DateTime     @db.Time
+  lugar               String       @db.VarChar(100)
+  fecha_creacion      DateTime     @default(now())
+  fecha_actualizacion DateTime     @updatedAt
+  asociacion          Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+
+  asistencias Asistencias[]
+}
+
+// tabla asistencia a reuniones
+model Asistencias {
+  id                  String             @id @default(uuid())
+  reunion_id          String             @db.Char(36)
+  miembro_id          String             @db.Char(36)
+  estado              EstadoUserReunion
+  fecha_creacion      DateTime           @default(now())
+  fecha_actualizacion DateTime           @updatedAt
+  reunion             Reuniones          @relation(fields: [reunion_id], references: [id], onDelete: Cascade)
+  miembro             MiembrosAsociacion @relation(fields: [miembro_id], references: [id], onDelete: Cascade)
+}
+
+enum EstadoUserReunion {
+  presente
+  falta
+}
+
+// tabla comentarios
+model Comentarios {
+  id                  String          @id @default(uuid())
+  publicacion_id      String          @db.Char(36)
+  usuario_id          String          @db.Char(36)
+  comentario          String          @db.Text
+  nivel               NivelComentario
+  padre               String?         @db.Char(36)
+  fecha_creacion      DateTime        @default(now())
+  fecha_actualizacion DateTime        @updatedAt
+  usuario             Usuarios        @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+  publicacion         Publicaciones   @relation(fields: [publicacion_id], references: [id], onDelete: Cascade)
+  padre_comentario    Comentarios?    @relation("ComentariosPariente", fields: [padre], references: [id], onDelete: Cascade)
+  hijo_comentario     Comentarios[]   @relation("ComentariosPariente")
+
+  @@index([id, usuario_id, padre, nivel], name: "comentarios_usuario_id_padre_nivel")
+}
+
+enum NivelComentario {
+  primario
+  secundario
+  terciario
+}
+
+// tabla de validacion publicaciones
+model ReaccionesPublicaciones {
+  id                  String         @id @default(uuid())
+  publicacion_id      String         @db.Char(36)
+  usuario_id          String         @db.Char(36)
+  tipo                TipoValidacion
+  fecha_creacion      DateTime       @default(now())
+  fecha_actualizacion DateTime       @updatedAt
+  publicacion         Publicaciones  @relation(fields: [publicacion_id], references: [id], onDelete: Cascade)
+  usuario             Usuarios       @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@index([id, usuario_id, tipo], name: "validacion_publicaciones_usuario_id_tipo")
+}
+
+enum TipoValidacion {
+  like
+  dislike
+}
