@@ -36,3 +36,13 @@ export interface UsuarioActualizarDatosI {
   telefono: string;
   direccion: string;
 }
+
+// asociacion registrar
+export interface AsociacionRegistroI {
+  admin_id: string;
+  nombre: string;
+  descripcion: string;
+  correo: string;
+  numero: string;
+  foto: string;
+}

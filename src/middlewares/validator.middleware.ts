@@ -30,6 +30,40 @@ export class Validator {
       return res.status(401).json({ message: [error.message] });
     }
   }
+
+  public static async validateAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      if (!req.user) throw new Error("No tienes autenticación");
+
+      if (req.user.rol !== "admin") throw new Error("No tienes permisos");
+
+      next();
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(401).json({ message: [error.message] });
+    }
+  }
+
+  public static async adminAsocValidator(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      if (!req.user) throw new Error("No tienes autenticación");
+
+      if (req.user.rol !== "admin_asoc") throw new Error("No tienes permisos");
+
+      next();
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(401).json({ message: [error.message] });
+    }
+  }
 }
 
 export class FilesValidator {

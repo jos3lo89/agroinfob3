@@ -1,0 +1,58 @@
+panel de administración de asociación:
+
+-> ver los datos de la asociación 
+-> actualizar los datos de la asociación 
+
+*** publicaciones ***
+-> registrar publicaciones
+-> actualizar publicaciones
+-> eliminar publicaciones 
+-> quitar o mostrar publicaciones 
+
+*** miembros ***
+-> registrar miembros a la asociación
+-> mostrar de miembros de la asociación
+-> imprimir lista de los miembros 
+-> eliminar miembros de la asociación
+-> actualizar datos de un miembro 
+
+*** reuniones ***
+-> registrar una reunión 
+-> eliminar una reunión
+-> actualizar una reunión
+-> quitar o mostrar un reunión
+-> llamar lista de la reunión
+-> imprimir la lista de asistentes 
+
+*** anuncios ***
+-> registrar un anuncio
+-> actualizar un anuncio
+-> eliminar un anuncio
+-> mostrar o quitar un anuncio
+
+*** reacciones ***
+->registrar una reacción
+->eliminar una reacción
+->actualizar una reacción
+->mostrar o quitar una reacción
+
+
+vista asociación:
+
+*** usuario publico  | usuario administrador ***
+-> ver los datos
+-> comentar
+-> dar me gusta o no me gusta
+
+*** usuario administrador de asociación ***
+-> eliminar comentarios 
+-> ver la cantidad de me gusta o no me gusta 
+
+panel de administrador general:
+
+-> panel de con cuadros ["cantidad de asociaciones", "cantidad de usuarios", "datos de la pagina*"]
+-> registrar una asociación ["backend"]
+-> eliminar una asociación ["backend"]
+-> eliminar usuarios ["backend"]
+-> 
+
