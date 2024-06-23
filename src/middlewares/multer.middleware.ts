@@ -25,4 +25,11 @@ export class MulterMiddleware {
   public static uploadSingle(fieldName: string) {
     return MulterMiddleware.getUploader().single(fieldName);
   }
+
+  public static uploadMultiple(fieldNames: string[]) {
+    return MulterMiddleware.getUploader().fields([
+      { name: fieldNames[0], maxCount: 1 },
+      { name: fieldNames[1], maxCount: 1 },
+    ]);
+  }
 }

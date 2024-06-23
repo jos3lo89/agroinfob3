@@ -1,5 +1,8 @@
 import prisma from "../config/database";
-import { AsociacionRegistroI } from "../interfaces/interfaces";
+import {
+  AsociacionRegistroI,
+  PublicacionRegistroI,
+} from "../interfaces/interfaces";
 
 export class AsociacionModel {
   public static async buscarAsocIdAdmin(id: string) {
@@ -146,6 +149,60 @@ export class AsociacionModel {
       return asocDeleted;
     } catch (error: any) {
       throw error;
+    }
+  }
+
+  public static async registrarPublicacion(data: PublicacionRegistroI) {
+    try {
+      const newPublicacion = await prisma.publicaciones.create({
+        data: {
+          asociacion_id: data.asociacion_id,
+          titulo: data.titulo,
+          estado: data.estado,
+          texto_uno: data.texto_uno,
+          texto_dos: data.texto_dos,
+          imagen_uno: data.imagen_uno,
+          imagen_dos: data.imagen_dos,
+        },
+      });
+
+      return newPublicacion;
+    } catch (error: any) {
+      throw error;
+    }
+  }
+
+  public static async eliminarPublicacion(id: string) {
+    try {
+      const deletedPublicacion = await prisma.publicaciones.delete({
+        where: {
+          id,
+        },
+      });
+
+      return deletedPublicacion;
+    } catch (error: any) {
+      throw new Error("No se ha encontrado la publicación");
+    }
+  }
+
+  public static async cambiarEstadoPublicacion(
+    id: string,
+    estado: "publico" | "privado"
+  ) {
+    try {
+      const publicacionUpdated = await prisma.publicaciones.update({
+        where: {
+          id,
+        },
+        data: {
+          estado: estado,
+        },
+      });
+
+      return publicacionUpdated;
+    } catch (error: any) {
+      throw new Error("No se ha encontrado la publicación");
     }
   }
 }

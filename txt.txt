@@ -4,14 +4,14 @@ panel de administración de asociación:
 -> actualizar los datos de la asociación 
 
 *** publicaciones ***
--> registrar publicaciones
+-> registrar publicaciones ["backend"]
 -> actualizar publicaciones
--> eliminar publicaciones 
--> quitar o mostrar publicaciones 
+-> eliminar publicaciones ["backend"]
+-> quitar o mostrar publicaciones ["backend"]
 
 *** miembros ***
--> registrar miembros a la asociación
--> mostrar de miembros de la asociación
+-> registrar miembros a la asociación ["backend"]
+-> mostrar de miembros de la asociación ["backend"]
 -> imprimir lista de los miembros 
 -> eliminar miembros de la asociación
 -> actualizar datos de un miembro 
@@ -35,6 +35,12 @@ panel de administración de asociación:
 ->eliminar una reacción
 ->actualizar una reacción
 ->mostrar o quitar una reacción
+
+*** comentarios ***
+->registrar un comentario
+->eliminar un comentario
+->actualizar un comentario
+->mostrar o quitar un comentario
 
 
 vista asociación:

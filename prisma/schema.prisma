@@ -142,12 +142,13 @@ enum TipoRedSocial {
 // tabla publicaciones
 model Publicaciones {
   id                  String                    @id @default(uuid())
-  asociacion_id       String                    @db.Char(36)
-  titulo              String?                   @db.VarChar(100)
-  texto_uno           String?                   @db.Text
-  texto_dos           String?                   @db.Text
-  imagen_uno          String?                   @db.VarChar(100)
-  imagen_dos          String?                   @db.VarChar(100)
+  asociacion_id       String                    @db.Char(36) // id de la asociacion
+  titulo              String?                   @db.VarChar(100) // titulo de la publicacion
+  texto_uno           String?                   @db.Text // texto de la publicacion
+  texto_dos           String?                   @db.Text // texto de la publicacion
+  imagen_uno          String?                   @db.VarChar(100) // imagen de la publicacion
+  imagen_dos          String?                   @db.VarChar(100) // imagen de la publicacion
+  estado              EstadoPublicacion         @default(publico) // ***********cambio
   imagen_uno_id       String?                   @db.Char(200)
   imagen_dos_id       String?                   @db.Char(200)
   fecha_creacion      DateTime                  @default(now())
@@ -156,6 +157,11 @@ model Publicaciones {
   reacciones          ReaccionesPublicaciones[]
 
   asociacion Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+}
+
+enum EstadoPublicacion {
+  publico
+  privado
 }
 
 // tabla anuncios
@@ -176,6 +182,7 @@ model Anuncios {
 model MiembrosAsociacion {
   id                  String        @id @default(uuid())
   asociacion_id       String        @db.Char(36)
+  dni                 Int           @unique
   nombre              String        @db.VarChar(50)
   apellido            String        @db.VarChar(50)
   correo              String?       @db.VarChar(100)

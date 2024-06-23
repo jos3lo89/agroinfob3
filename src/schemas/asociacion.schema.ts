@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { optional, z } from "zod";
 
 export class AsociacionSchemas {
   public static asociacionRegistrarSchema() {
@@ -51,14 +51,45 @@ export class AsociacionSchemas {
         .max(15, {
           message: "El numero es muy largo",
         }),
-      // tipo: z
-      //   .string({
-      //     required_error: "El tipo de telefono es requerido",
-      //     invalid_type_error: "El tipo de telefono debe ser un string",
-      //   })
-      //   .min(1, {
-      //     message: "El tipo de telefono debe tener al menos un caracter",
-      //   }),
+    });
+  }
+
+  public static publicacionesSchema() {
+    return z.object({
+      asociacion_id: z
+        .string({
+          required_error: "El asociacion_id es requerido",
+          invalid_type_error: "El asociacion_id debe ser un string",
+        })
+        .min(36, {
+          message: "El asociacion_id debe tener al menos 36 caracteres",
+        }),
+      titulo: z
+        .string({
+          required_error: "El titulo es requerido",
+          invalid_type_error: "El titulo debe ser un string",
+        })
+        .min(1, {
+          message: "El titulo debe tener al menos un caracter",
+        }),
+      texto_uno: z
+        .string({
+          invalid_type_error: "El texto_uno debe ser un string",
+        })
+        .optional(),
+      texto_dos: z
+        .string({
+          invalid_type_error: "El texto_dos debe ser un string",
+        })
+        .optional(),
+      estado: z
+        .string({
+          required_error: "El estado es requerido",
+          invalid_type_error: "El estado debe ser un string",
+        })
+        .min(1, {
+          message: "El estado debe tener al menos un caracter",
+        }),
     });
   }
 }

@@ -91,4 +91,54 @@ export class FilesValidator {
       return res.status(400).json({ message: [error.message] });
     }
   }
+
+  public static async validateMultiFiles(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+      const handleFileValidation = async (file: Express.Multer.File) => {
+        if (!file.mimetype.match(/image\/(jpeg|jpg|png|webp)/)) {
+          throw new Error(
+            `El archivo ${file.originalname} tiene un formato no permitido. Sólo se permiten imágenes de tipo jpeg, jpg, png y webp.`
+          );
+        }
+      };
+
+      const deleteAllFiles = async () => {
+        const fileKeys = Object.keys(files);
+        for (const key of fileKeys) {
+          const fileArray = files[key];
+          for (const file of fileArray) {
+            await fs.unlink(file.path);
+          }
+        }
+      };
+
+      const fileKeys = Object.keys(files);
+
+      if (fileKeys.length === 0) {
+        return next();
+      }
+
+      for (const key of fileKeys) {
+        const fileArray = files[key];
+        for (const file of fileArray) {
+          try {
+            await handleFileValidation(file);
+          } catch (error) {
+            await deleteAllFiles();
+            throw error;
+          }
+        }
+      }
+
+      next();
+    } catch (error: any) {
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
 }

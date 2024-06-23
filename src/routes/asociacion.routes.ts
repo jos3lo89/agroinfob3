@@ -47,11 +47,28 @@ router.delete(
 router.post(
   "/registrar-publicacion",
   Validator.validateAuth,
-  Validator.adminAsocValidator
-  // foto
-  // fotoValidar
-  // schema
-  // registrarPublicacion
+  Validator.adminAsocValidator,
+  MulterMiddleware.uploadMultiple(["imagen_uno", "imagen_dos"]),
+  FilesValidator.validateMultiFiles,
+  AsociacionMiddleware.schemaValidation(
+    AsociacionSchemas.publicacionesSchema()
+  ),
+  AsociacionController.registrarPublicacion
 );
 
+// eliminar publicacion
+router.delete(
+  "/eliminar-publicacion/:id",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
+  AsociacionController.eliminarPublicacion
+);
+
+// cambiar estado de publicacion
+router.put(
+  "/cambiar-estado-publicacion/:id/:estado",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
+  AsociacionController.cambiarEstadoPublicacion
+);
 export default router;

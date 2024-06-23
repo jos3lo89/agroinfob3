@@ -46,3 +46,28 @@ export interface AsociacionRegistroI {
   numero: string;
   foto: string;
 }
+
+// publicacion registrar
+export interface PublicacionRegistroI {
+  asociacion_id: string;
+  titulo: string;
+  estado: "publico" | "privado";
+  texto_uno: string | undefined;
+  texto_dos: string | undefined;
+  imagen_uno: string | undefined;
+  imagen_dos: string | undefined;
+}
+
+
+// miembro registrar
+export interface MiembroRegistroI {
+  asociacion_id: string;
+  nombre: string;
+  apellido: string;
+  correo: string | undefined;
+  fecha_nacimiento: string | undefined;
+  genero: "masculino" | "femenino" | "otro" | undefined;
+  telefono: string | undefined;
+  direccion: string | undefined;
+  dni: number
+}

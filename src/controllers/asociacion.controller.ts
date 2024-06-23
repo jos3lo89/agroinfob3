@@ -3,6 +3,13 @@ import { config } from "../config/config";
 import { AsociacionModel } from "../models/asociacion.model";
 import * as fs from "node:fs/promises";
 
+// Definición de la interfaz para req.files
+interface MulterRequest extends Request {
+  files: {
+    [fieldname: string]: Express.Multer.File[];
+  };
+}
+
 export class AsociacionController {
   public static async buscarAsocById(id: string) {
     try {
@@ -148,10 +155,87 @@ export class AsociacionController {
       if (!asocDeleted) {
         throw new Error("No se ha encontrado la asociación");
       }
-      
+
       await fs.unlink(`./public${asocDeleted.foto}`);
 
       res.sendStatus(204);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async registrarPublicacion(req: Request, res: Response) {
+    try {
+      const { asociacion_id, titulo, texto_uno, texto_dos, estado } = req.body;
+
+      console.log(Object.assign({}, req.body));
+      console.log(Object.assign({}, req.files));
+
+      const newPublicacion = await AsociacionModel.registrarPublicacion({
+        asociacion_id,
+        titulo,
+        texto_uno,
+        texto_dos,
+        estado: estado,
+        imagen_uno: (req as MulterRequest).files["imagen_uno"]?.[0]?.filename
+          ? `/uploads/${
+              (req as MulterRequest).files["imagen_uno"]?.[0]?.filename
+            }`
+          : undefined,
+        imagen_dos: (req as MulterRequest).files["imagen_dos"]?.[0]?.filename
+          ? `/uploads/${
+              (req as MulterRequest).files["imagen_dos"]?.[0]?.filename
+            }`
+          : undefined,
+      });
+
+      if (!newPublicacion) {
+        throw new Error("No se ha registrado la publicación");
+      }
+
+      res.status(200).json(newPublicacion);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async eliminarPublicacion(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const deletedPublicacion = await AsociacionModel.eliminarPublicacion(id);
+
+      if (deletedPublicacion.imagen_uno) {
+        await fs.unlink(`./public${deletedPublicacion.imagen_uno}`);
+      }
+
+      if (deletedPublicacion.imagen_dos) {
+        await fs.unlink(`./public${deletedPublicacion.imagen_dos}`);
+      }
+
+      res.sendStatus(204);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async cambiarEstadoPublicacion(req: Request, res: Response) {
+    try {
+      const { id, estado } = req.params;
+
+      if (estado !== "publico" && estado !== "privado") {
+        throw new Error("El estado debe ser publico o privado");
+      }
+
+      const publicacionUpdated = await AsociacionModel.cambiarEstadoPublicacion(
+        id,
+        estado
+      );
+
+      res.status(200).json(publicacionUpdated);
     } catch (error: any) {
       console.log(error.message);
       return res.status(400).json({ message: [error.message] });
