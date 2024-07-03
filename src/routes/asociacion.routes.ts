@@ -71,4 +71,12 @@ router.put(
   Validator.adminAsocValidator,
   AsociacionController.cambiarEstadoPublicacion
 );
+
+// POST - reacciones
+router.post(
+  "/publicacion-reaccion/:publicacion_id/:tipo",
+  Validator.validateAuth,
+  AsociacionController.reaccionPublicacion
+);
+
 export default router;

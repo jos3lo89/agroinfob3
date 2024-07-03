@@ -25,4 +25,20 @@ router.get(
   MiembrosController.listar
 );
 
+// GET listar pdf
+router.get(
+  "/listar-pdf/:asoc_id",
+  // Validator.validateAuth,
+  // Validator.adminAsocValidator,
+  MiembrosController.listarPdf
+  // madar al usuario mediente uotra ruta que made el link completo url server + ruta
+);
+
+// eliminar miembros
+router.delete(
+  "/eliminar/:id",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
+  MiembrosController.eliminar
+);
 export default router;

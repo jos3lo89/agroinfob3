@@ -20,7 +20,7 @@ export class UsuarioController {
         clave: hashedClave,
       });
 
-      res.sendStatus(200);
+      res.sendStatus(201);
     } catch (error: any) {
       console.log(error.message);
       return res.status(400).json({ message: [error.message] });
@@ -34,12 +34,12 @@ export class UsuarioController {
       const userFound = await UsuarioModel.buscarUsuarioCorreo(correo);
 
       if (!userFound)
-        return res.status(404).json({ message: "Usuario no encontrado" });
+        return res.status(404).json({ message: ["Usuario no encontrado"] });
 
       const isMatch = await bcrypt.compare(clave, userFound.clave);
 
       if (!isMatch)
-        return res.status(401).json({ message: "Clave incorrecta" });
+        return res.status(401).json({ message: ["Clave incorrecta"] });
 
       const token = await Jwt.createToken({
         id: userFound.id,

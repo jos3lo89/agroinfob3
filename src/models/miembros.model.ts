@@ -60,4 +60,32 @@ export class MiembrosModel {
       throw new Error("No se pudo listar los miembros");
     }
   }
+
+  public static async listarPdf(asoc_id: string) {
+    try {
+      const list = await prisma.miembrosAsociacion.findMany({
+        where: {
+          asociacion_id: asoc_id,
+        },
+      });
+
+      return list;
+    } catch (error: any) {
+      throw new Error("No se pudo listar los miembros");
+    }
+  }
+
+  public static async eliminar(id: string) {
+    try {
+      const miembroDeleted = await prisma.miembrosAsociacion.delete({
+        where: {
+          id,
+        },
+      });
+
+      return miembroDeleted;
+    } catch (error: any) {
+      throw new Error("No se pudo eliminar el miembro");
+    }
+  }
 }

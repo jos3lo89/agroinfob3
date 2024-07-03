@@ -205,4 +205,24 @@ export class AsociacionModel {
       throw new Error("No se ha encontrado la publicación");
     }
   }
+
+  public static async reaccionPublicacion(data: {
+    publicacion_id: string;
+    idUser: string;
+    tipo: "like" | "dislike";
+  }) {
+    try {
+      const newReaction = await prisma.reaccionesPublicaciones.create({
+        data: {
+          publicacion_id: data.publicacion_id,
+          usuario_id: data.idUser,
+          tipo: data.tipo,
+        },
+      });
+
+      return newReaction;
+    } catch (error: any) {
+      throw new Error("No se pudo registrar la reaccion");
+    }
+  }
 }

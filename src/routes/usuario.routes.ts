@@ -7,27 +7,27 @@ import { MulterMiddleware } from "../middlewares/multer.middleware";
 
 const router = Router();
 
-// POST registrar
+// POST registrar -> listo
 router.post(
   "/registrar",
   UsuarioMiddleware.schemaValidation(UsuarioSchemas.usuarioRegistroSchema()),
   UsuarioController.registrar
 );
 
-// POST login
+// POST login -> listo
 router.post(
   "/login",
   UsuarioMiddleware.schemaValidation(UsuarioSchemas.usuarioLoginSchema()),
   UsuarioController.login
 );
 
-// POST logout
+// POST logout -> listo
 router.post("/logout", Validator.validateAuth, UsuarioController.logout);
 
-// GET datos
+// GET datos -> listo
 router.get("/datos", Validator.validateAuth, UsuarioController.datosUsuario);
 
-// PUT actualizar datos
+// PUT actualizar datos -> lsito -> mejorar
 router.put(
   "/actualizar-datos",
   Validator.validateAuth,
@@ -37,7 +37,7 @@ router.put(
   UsuarioController.actualizarDatosUsuario
 );
 
-// PUT actualizar clave
+// PUT actualizar clave -> listo
 router.put(
   "/actualizar-clave",
   Validator.validateAuth,
@@ -47,7 +47,7 @@ router.put(
   UsuarioController.actualizarClave
 );
 
-// POST agregar foto de usuario
+// POST agregar foto de usuario -> listo
 router.post(
   "/agregar-foto",
   Validator.validateAuth,
@@ -56,14 +56,14 @@ router.post(
   UsuarioController.agregarFoto
 );
 
-// DELETE eliminar foto de usuario
+// DELETE eliminar foto de usuario -> listo
 router.delete(
   "/eliminar-foto",
   Validator.validateAuth,
   UsuarioController.eliminarFoto
 );
 
-// PUT actualizar foto de usuario
+// PUT actualizar foto de usuario -> lsito
 router.put(
   "/actualizar-foto",
   Validator.validateAuth,
@@ -72,14 +72,11 @@ router.put(
   UsuarioController.actualizarFoto
 );
 
-// DELETE eliminar usuario
+// DELETE eliminar usuario ->  listo
 router.delete(
   "/eliminar",
   Validator.validateAuth,
   UsuarioController.eleminarUsuario
 );
-
-// // POST agregar telefono de usuario
-// router.post("/usuario/agregar-telefono");
 
 export default router;

@@ -241,4 +241,29 @@ export class AsociacionController {
       return res.status(400).json({ message: [error.message] });
     }
   }
+
+  public static async reaccionPublicacion(req: Request, res: Response) {
+    try {
+      if (!req.user) {
+        throw new Error("Falta iniciar sesion");
+      }
+      const idUser = req.user.id;
+      const { publicacion_id, tipo } = req.params;
+
+      if (tipo !== "like" && tipo !== "dislike") {
+        throw new Error("Tipo de reaccion no valido");
+      }
+
+      const publicacionUpdated = await AsociacionModel.reaccionPublicacion({
+        publicacion_id,
+        idUser,
+        tipo,
+      });
+
+      res.status(200).json(publicacionUpdated);
+    } catch (error: any) {
+      console.log(error.message);
+      res.status(400).json({ message: [error.message] });
+    }
+  }
 }

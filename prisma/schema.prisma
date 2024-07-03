@@ -166,16 +166,22 @@ enum EstadoPublicacion {
 
 // tabla anuncios
 model Anuncios {
-  id                  String   @id @default(uuid())
-  asociacion_id       String   @db.Char(36)
-  titulo              String   @db.VarChar(100)
-  descripcion         String   @db.Text
-  foto                String?  @db.VarChar(100)
-  foto_id             String?  @db.Char(200)
-  fecha_creacion      DateTime @default(now())
-  fecha_actualizacion DateTime @updatedAt
+  id                  String        @id @default(uuid())
+  asociacion_id       String        @db.Char(36)
+  titulo              String        @db.VarChar(100)
+  descripcion         String        @db.Text
+  estado              EstadoAnuncio @default(publico)
+  foto                String?       @db.VarChar(100)
+  foto_id             String?       @db.Char(200)
+  fecha_creacion      DateTime      @default(now())
+  fecha_actualizacion DateTime      @updatedAt
 
   asociacion Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
+}
+
+enum EstadoAnuncio {
+  publico
+  privado
 }
 
 // tabla miembros de asociaciones
@@ -267,6 +273,7 @@ model ReaccionesPublicaciones {
   publicacion         Publicaciones  @relation(fields: [publicacion_id], references: [id], onDelete: Cascade)
   usuario             Usuarios       @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
 
+  @@unique([publicacion_id, usuario_id], name: "unique_reaccion")
   @@index([id, usuario_id, tipo], name: "validacion_publicaciones_usuario_id_tipo")
 }
 
