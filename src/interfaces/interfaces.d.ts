@@ -71,3 +71,14 @@ export interface MiembroRegistroI {
   direccion: string | undefined;
   dni: number
 }
+
+
+// reunion registrar
+export interface ReunionRegistroI {
+  asociacion_id: string;
+  titulo: string;
+  descripcion: string;
+  fecha_hora: string;
+  lugar: string;
+  estado: "proceso" | "culminado";
+}

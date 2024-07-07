@@ -88,4 +88,18 @@ export class MiembrosModel {
       throw new Error("No se pudo eliminar el miembro");
     }
   }
+
+  public static async buscarIdAsocByIdAdminAsoc(id: string) {
+    try {
+      const asocFound = await prisma.asociaciones.findFirst({
+        where: {
+          admin_id: id,
+        },
+      });
+
+      return asocFound;
+    } catch (error: any) {
+      throw new Error("No se pudo buscar el miembro");
+    }
+  }
 }

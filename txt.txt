@@ -4,32 +4,35 @@ panel de administración de asociación:
 -> actualizar los datos de la asociación 
 
 *** publicaciones ***
--> registrar publicaciones ["backend"]
+-> registrar publicaciones ["backend"] - ["frontend"]
 -> actualizar publicaciones -> tranca
--> eliminar publicaciones ["backend"]
--> quitar o mostrar publicaciones ["backend"]
+-> listar publicaciones -> ["backend"] - ["frontend"]
+-> eliminar publicaciones ["backend"] - ["frontend"]
+-> quitar o mostrar publicaciones ["backend"] - ["frontend"]
 
 *** miembros ***
--> registrar miembros a la asociación ["backend"]
--> mostrar de miembros de la asociación ["backend"]
--> imprimir lista de los miembros ["backend"]
--> eliminar miembros de la asociación ["backend"]
+-> registrar miembros a la asociación ["backend"] - ["frontend"]
+-> mostrar de miembros de la asociación ["backend"] - ["frontend"]
+-> eliminar miembros de la asociación ["backend"] - ["frontend"]
+-> imprimir lista de los miembros ["backend"] - ["frontend"]
 -> actualizar datos de un miembro -> tranca
 
 *** reuniones ***
--> registrar una reunión 
--> eliminar una reunión
--> actualizar una reunión
--> quitar o mostrar un reunión
--> llamar lista de la reunión
--> imprimir la lista de asistentes 
+-> registrar una reunión -> ["backend] - ["frontend"]
+-> eliminar una reunión -> ["backend"] - ["frontend"]
+-> llamar lista de la reunión - ["backend"] - ["frontend"]
+-> imprimir la lista de asistentes -> ["backend"] - ["frontend"]
+-> actualizar una reunión - tranca
 
 *** anuncios ***
--> registrar un anuncio -> ["backend"]
--> listar anuncio (genral,. by id, by id asoc) -> ["backend"]
--> actualizar estado del anuncio -> ["backend"]
--> eliminar un anuncio ->  ["backend"]
+-> registrar un anuncio -> ["backend"] - ["frontend"]
+-> listar anuncio -> ["backend"] - ["frontend"]
+-> eliminar un anuncio ->  ["backend"] - ["frontend"]
+-> actualizar estado del anuncio -> ["backend"]  - ["frontend"]
 -> actualizar un anuncio ->  tranca
+
+
+->->-> teminar el front
 
 *** reacciones *** con el fronted ya
 ->registrar una reacción ["backend"]
@@ -63,3 +66,7 @@ panel de administrador general:
 -> eliminar usuarios ["backend"]
 -> 
 
+
+
+**************************** trello
+puntucaicoens

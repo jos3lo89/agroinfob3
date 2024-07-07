@@ -88,6 +88,22 @@ export class AnunciosModel {
     }
   }
 
+  public static async listarAnunciosByNombreAsoc(nombre: string) {
+    try {
+      const anunciosList = await prisma.anuncios.findMany({
+        where: {
+          asociacion: {
+            nombre,
+          },
+        },
+      });
+
+      return anunciosList;
+    } catch (error: any) {
+      throw new Error("No se pudo listar los anuncios");
+    }
+  }
+
   public static async eliminarAnuncio(id: string) {
     try {
       const anuncioDeleted = await prisma.anuncios.delete({
@@ -102,5 +118,33 @@ export class AnunciosModel {
     }
   }
 
+  public static async buscarAsocByIdAdminAsoc(id: string) {
+    try {
+      const asocFound = await prisma.asociaciones.findFirst({
+        where: {
+          admin_id: id,
+        },
+      });
+
+      return asocFound;
+    } catch (error: any) {
+      throw new Error("No se pudo buscar la asociacion");
+    }
+  }
+
+  public static async listarAnunciosAsoc(id: string) {
+    try {
+      
+      const anuncios = await prisma.anuncios.findMany({
+        where: {
+          asociacion_id: id,
+        },
+      });
   
+      return anuncios;
+
+    } catch (error: any) {
+      throw new Error("No se pudo listar los anuncios");
+    }
+  }
 }

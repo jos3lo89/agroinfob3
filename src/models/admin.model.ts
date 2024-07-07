@@ -30,4 +30,14 @@ export class AdminModel {
       throw error;
     }
   }
+
+  public static async listarUsuarios() {
+    try {
+      const users = await prisma.usuarios.findMany();
+
+      return users;
+    } catch (error: any) {
+      throw new Error("Error al listar usuarios");
+    }
+  }
 }

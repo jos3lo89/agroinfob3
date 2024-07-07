@@ -19,7 +19,7 @@ router.post(
 
 // GET Listar miembros
 router.get(
-  "/listar/:asoc_id",
+  "/listar",
   Validator.validateAuth,
   Validator.adminAsocValidator,
   MiembrosController.listar
@@ -27,9 +27,9 @@ router.get(
 
 // GET listar pdf
 router.get(
-  "/listar-pdf/:asoc_id",
-  // Validator.validateAuth,
-  // Validator.adminAsocValidator,
+  "/listar-pdf",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
   MiembrosController.listarPdf
   // madar al usuario mediente uotra ruta que made el link completo url server + ruta
 );

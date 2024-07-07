@@ -7,10 +7,12 @@ interface Row {
 class PdfKit {
   columns: string[];
   rows: Row[];
+  titulo: string;
 
-  constructor(columns: string[], rows: Row[]) {
+  constructor(columns: string[], rows: Row[], titulo: string) {
     this.columns = columns;
     this.rows = rows;
+    this.titulo = titulo;
   }
 
   buildpdf(dataCallback: (chunk: Buffer) => void, endCallback: () => void): void {
@@ -20,7 +22,7 @@ class PdfKit {
     doc.on("end", endCallback);
 
     // agregar titulo
-    doc.fontSize(20).text("Lista de Miembros", { align: "center" });
+    doc.fontSize(20).text(this.titulo, { align: "center" });
     doc.moveDown();
 
     // definiendo el cuerpo de la tabla

@@ -6,8 +6,15 @@ import { format } from "date-fns";
 export class MiembrosController {
   public static async registrar(req: Request, res: Response) {
     try {
+      if (!req.user) throw new Error("No tienes autenticación");
+      const userId = req.user.id;
+      const asocFound = await MiembrosModel.buscarIdAsocByIdAdminAsoc(userId);
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
       const {
-        asociacion_id,
         nombre,
         apellido,
         correo,
@@ -19,7 +26,7 @@ export class MiembrosController {
       } = req.body;
 
       const newMiembro = await MiembrosModel.registrar({
-        asociacion_id,
+        asociacion_id: asocFound.id,
         nombre,
         apellido,
         correo,
@@ -30,7 +37,7 @@ export class MiembrosController {
         dni,
       });
 
-      res.status(200).json(newMiembro);
+      res.status(201).json(newMiembro);
     } catch (error: any) {
       console.log(error.message);
       return res.status(400).json({ message: [error.message] });
@@ -39,9 +46,17 @@ export class MiembrosController {
 
   public static async listar(req: Request, res: Response) {
     try {
-      const { asoc_id } = req.params;
+      // const { asoc_id } = req.params;
 
-      const miembros = await MiembrosModel.listar(asoc_id);
+      if (!req.user) throw new Error("No tienes autenticación");
+      const userId = req.user.id;
+      const asocFound = await MiembrosModel.buscarIdAsocByIdAdminAsoc(userId);
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
+      const miembros = await MiembrosModel.listar(asocFound.id);
 
       res.status(200).json(miembros);
     } catch (error: any) {
@@ -52,9 +67,18 @@ export class MiembrosController {
 
   public static async listarPdf(req: Request, res: Response) {
     try {
-      const { asoc_id } = req.params;
+      if (!req.user) throw new Error("No tienes autenticación");
+      const userId = req.user.id;
+      console.log(userId);
+      const asocFound = await MiembrosModel.buscarIdAsocByIdAdminAsoc(userId);
 
-      const miembros = await MiembrosModel.listarPdf(asoc_id);
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
+      //// para abajo no tocar
+
+      const miembros = await MiembrosModel.listarPdf(asocFound.id);
 
       const columns = [
         "DNI",
@@ -73,7 +97,8 @@ export class MiembrosController {
           ? format(new Date(miembro.fecha_inscripcion), "dd/MM/yyyy")
           : "",
       }));
-      const pdfKit = new PdfKit(columns, formattedMiembros);
+
+      const pdfKit = new PdfKit(columns, formattedMiembros, "Lista de Miembros");
 
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "inline; filename=miembros.pdf");

@@ -3,14 +3,14 @@ import { z } from "zod";
 export class AnunciosSchemas {
   public static anuncioRegistroSchema() {
     return z.object({
-      asociacion_id: z
-        .string({
-          required_error: "id de la asociación es requerido",
-          invalid_type_error: "Id de la asociación debe ser string",
-        })
-        .min(36, {
-          message: "El id de asociación al menos debe tener 36 caracteres",
-        }),
+      // asociacion_id: z
+      //   .string({
+      //     required_error: "id de la asociación es requerido",
+      //     invalid_type_error: "Id de la asociación debe ser string",
+      //   })
+      //   .min(36, {
+      //     message: "El id de asociación al menos debe tener 36 caracteres",
+      //   }),
       titulo: z
         .string({
           required_error: "El titulo es requerido",

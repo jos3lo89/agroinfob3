@@ -25,4 +25,14 @@ export class AdminController {
       return res.status(400).json({ message: [error.message] });
     }
   }
+
+  public static async listarUsuarios(req: Request, res: Response) {
+    try {
+      const users = await AdminModel.listarUsuarios();
+      return res.status(200).json(users);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
 }

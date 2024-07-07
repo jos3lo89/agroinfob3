@@ -8,6 +8,8 @@ import asociacionRouter from "./routes/asociacion.routes";
 import adminRoutes from "./routes/admin.routes";
 import miembrosRouter from "./routes/miembros.routes";
 import anunciosRouter from "./routes/anuncios.routes";
+import reunionesRouter from "./routes/reuniones.routes";
+import comentariosRouter from "./routes/comentarios.routes";
 
 const app = express();
 
@@ -31,5 +33,7 @@ app.use("/api/asociacion", asociacionRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/miembro", miembrosRouter);
 app.use("/api/anuncios", anunciosRouter);
+app.use("/api/reuniones", reunionesRouter);
+app.use("/api/comentarios", comentariosRouter);
 
 export default app;

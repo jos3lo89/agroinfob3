@@ -225,4 +225,102 @@ export class AsociacionModel {
       throw new Error("No se pudo registrar la reaccion");
     }
   }
+
+  public static async buscarAsocByIdAdminAsoc(id: string) {
+    try {
+      const usuariosAsociados = await prisma.asociaciones.findFirst({
+        where: {
+          admin_id: id,
+        },
+      });
+
+      return usuariosAsociados;
+    } catch (error: any) {
+      throw new Error("No se pudo listar los usuarios asociados");
+    }
+  }
+
+  public static async listarPublicaciones(id: string) {
+    try {
+      const publicaciones = await prisma.publicaciones.findMany({
+        where: {
+          asociacion_id: id,
+        },
+      });
+
+      return publicaciones;
+    } catch (error: any) {
+      throw new Error("No se pudo listar las publicaciones");
+    }
+  }
+
+  public static async listarPublicacionesPorAsoc(nombreasoc: string) {
+    try {
+      const asocFound = await prisma.asociaciones.findFirst({
+        where: {
+          nombre: nombreasoc,
+        },
+      });
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
+      const publicaciones = await prisma.publicaciones.findMany({
+        where: {
+          asociacion_id: asocFound.id,
+        },
+      });
+
+      if (!publicaciones) {
+        throw new Error("No se ha encontrado la publicación");
+      }
+
+      return publicaciones;
+    } catch (error: any) {
+      throw Error;
+    }
+  }
+
+  public static async listarPublicacionesPorId(id: string) {
+    try {
+      const publicaciones = await prisma.publicaciones.findFirst({
+        where: {
+          id,
+        },
+      });
+
+      return publicaciones;
+    } catch (error: any) {
+      throw new Error("No se pudo listar las publicaciones");
+    }
+  }
+
+  public static async buscarNumeroMiembrosAsoc(nombreasoc: string) {
+    try {
+      const asocFound = await prisma.asociaciones.findFirst({
+        where: {
+          nombre: nombreasoc,
+        },
+      });
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
+      const numeroDeMiembros = await prisma.miembrosAsociacion.count({
+        where: {
+          asociacion_id: asocFound.id,
+        },
+      });
+
+      if (!numeroDeMiembros) {
+        throw new Error("No se ha encontrado el numero de miembros");
+      }
+
+      return numeroDeMiembros;
+    } catch (error: any) {
+      throw Error;
+    }
+  }
 }

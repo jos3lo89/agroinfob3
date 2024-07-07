@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { config } from "../config/config";
 import { AsociacionModel } from "../models/asociacion.model";
 import * as fs from "node:fs/promises";
+import { log } from "node:console";
 
 // Definición de la interfaz para req.files
 interface MulterRequest extends Request {
@@ -45,7 +46,7 @@ export class AsociacionController {
         descripcion,
         correo,
         foto: `/uploads/${req.file.filename}`,
-        numero,
+        numero: numero.toString(),
       });
 
       res.status(201).json({
@@ -167,13 +168,23 @@ export class AsociacionController {
 
   public static async registrarPublicacion(req: Request, res: Response) {
     try {
-      const { asociacion_id, titulo, texto_uno, texto_dos, estado } = req.body;
+      if (!req.user) throw new Error("No tienes autenticación");
+
+      const { titulo, texto_uno, texto_dos, estado } = req.body;
+
+      const userId = req.user.id;
+
+      const asocFound = await AsociacionModel.buscarAsocByIdAdminAsoc(userId);
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
 
       console.log(Object.assign({}, req.body));
       console.log(Object.assign({}, req.files));
 
       const newPublicacion = await AsociacionModel.registrarPublicacion({
-        asociacion_id,
+        asociacion_id: asocFound.id,
         titulo,
         texto_uno,
         texto_dos,
@@ -194,7 +205,30 @@ export class AsociacionController {
         throw new Error("No se ha registrado la publicación");
       }
 
-      res.status(200).json(newPublicacion);
+      res.status(201).json(newPublicacion);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async listarPublicaciones(req: Request, res: Response) {
+    try {
+      if (!req.user) throw new Error("No tienes autenticación");
+
+      const userId = req.user.id;
+
+      const asocFound = await AsociacionModel.buscarAsocByIdAdminAsoc(userId);
+
+      if (!asocFound) {
+        throw new Error("No se ha encontrado la asociación");
+      }
+
+      const publicaciones = await AsociacionModel.listarPublicaciones(
+        asocFound.id
+      );
+
+      res.status(200).json(publicaciones);
     } catch (error: any) {
       console.log(error.message);
       return res.status(400).json({ message: [error.message] });
@@ -264,6 +298,49 @@ export class AsociacionController {
     } catch (error: any) {
       console.log(error.message);
       res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async listarPublicacionesPorAsoc(req: Request, res: Response) {
+    try {
+      const { nombreasoc } = req.params;
+
+      const publicaciones = await AsociacionModel.listarPublicacionesPorAsoc(
+        nombreasoc
+      );
+
+      res.status(200).json(publicaciones);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async listarPublicacionesPorId(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const publicaciones = await AsociacionModel.listarPublicacionesPorId(id);
+
+      res.status(200).json(publicaciones);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
+
+  public static async numeroMiembrosAsoc(req: Request, res: Response) {
+    try {
+      const { nombreasoc } = req.params;
+
+      const numeroDeMiembros = await AsociacionModel.buscarNumeroMiembrosAsoc(
+        nombreasoc
+      );
+
+      res.status(200).json({ numeroDeMiembros });
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
     }
   }
 }

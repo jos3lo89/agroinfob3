@@ -7,7 +7,7 @@ import { AsociacionController } from "../controllers/asociacion.controller";
 
 const router = Router();
 
-// POST registrar
+// POST registrar / solo admin
 router.post(
   "/registrar",
   Validator.validateAuth,
@@ -64,6 +64,14 @@ router.delete(
   AsociacionController.eliminarPublicacion
 );
 
+// GET - listar publicaciones por asociación
+router.get(
+  "/listar-publicaciones-asoc",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
+  AsociacionController.listarPublicaciones
+);
+
 // cambiar estado de publicacion
 router.put(
   "/cambiar-estado-publicacion/:id/:estado",
@@ -79,4 +87,26 @@ router.post(
   AsociacionController.reaccionPublicacion
 );
 
+// GET - listar publicaciones por asociación
+router.get(
+  "/listar-publicaciones-por-asoc/:nombreasoc",
+  // Validator.validateAuth,
+  // Validator.adminAsocValidator,
+  // AsociacionController.listarPublicaciones
+  AsociacionController.listarPublicacionesPorAsoc
+);
+
+// GET - listar publicaciones por id
+router.get(
+  "/listar-publicaciones-por-id/:id",
+  // Validator.validateAuth,
+  // Validator.adminAsocValidator,
+  // AsociacionController.listarPublicaciones
+  AsociacionController.listarPublicacionesPorId
+);
+
+router.get(
+  "/numero-miembros-asoc/:nombreasoc",
+  AsociacionController.numeroMiembrosAsoc
+);
 export default router;

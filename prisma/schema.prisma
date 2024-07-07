@@ -211,14 +211,21 @@ model Reuniones {
   asociacion_id       String       @db.Char(36)
   titulo              String       @db.VarChar(100)
   descripcion         String       @db.Text
-  fecha               DateTime     @db.Date
-  hora                DateTime     @db.Time
+  fecha_hora          DateTime     @db.DateTime()
+  estado              EstadoReu
+  // fecha_hora          DateTime     @db.DateTime()
+  // hora                DateTime     @db.Time
   lugar               String       @db.VarChar(100)
   fecha_creacion      DateTime     @default(now())
   fecha_actualizacion DateTime     @updatedAt
   asociacion          Asociaciones @relation(fields: [asociacion_id], references: [id], onDelete: Cascade)
 
   asistencias Asistencias[]
+}
+
+enum EstadoReu {
+  proceso
+  culminado
 }
 
 // tabla asistencia a reuniones

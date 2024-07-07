@@ -22,8 +22,14 @@ router.post(
 router.get("/mostrar", AnunciosController.mostrarAnuncios);
 router.get("/mostrar/:id", AnunciosController.mostrarAnuncios);
 
-// GET - listar anuncio por asociación
+// GET - listar anuncio por asociación id
 router.get("/listar-asoc/:id", AnunciosController.listarByIdAsoc);
+
+// GET - listar anuncio por nombre de asociacion
+router.get(
+  "/listar-asoc-nombre/:nombre",
+  AnunciosController.listarByNombreAsoc
+);
 
 // DELETE - eliminar un anuncio mediante el ID
 router.delete(
@@ -43,5 +49,12 @@ router.put(
 
 // PUT - actualizar los datos de un anuncio mediante el ID
 router.put("/eliminar/:id");
+
+router.get(
+  "/listar-anuncios-asoc-admin",
+  Validator.validateAuth,
+  Validator.adminAsocValidator,
+  AnunciosController.listarAnunciosAsoc
+);
 
 export default router;

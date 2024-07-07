@@ -27,7 +27,7 @@ router.post("/logout", Validator.validateAuth, UsuarioController.logout);
 // GET datos -> listo
 router.get("/datos", Validator.validateAuth, UsuarioController.datosUsuario);
 
-// PUT actualizar datos -> lsito -> mejorar
+// PUT actualizar datos -> lsito -> mejorar 
 router.put(
   "/actualizar-datos",
   Validator.validateAuth,

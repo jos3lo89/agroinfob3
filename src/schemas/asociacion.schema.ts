@@ -56,14 +56,14 @@ export class AsociacionSchemas {
 
   public static publicacionesSchema() {
     return z.object({
-      asociacion_id: z
-        .string({
-          required_error: "El asociacion_id es requerido",
-          invalid_type_error: "El asociacion_id debe ser un string",
-        })
-        .min(36, {
-          message: "El asociacion_id debe tener al menos 36 caracteres",
-        }),
+      // asociacion_id: z
+      //   .string({
+      //     required_error: "El asociacion_id es requerido",
+      //     invalid_type_error: "El asociacion_id debe ser un string",
+      //   })
+      //   .min(36, {
+      //     message: "El asociacion_id debe tener al menos 36 caracteres",
+      //   }),
       titulo: z
         .string({
           required_error: "El titulo es requerido",

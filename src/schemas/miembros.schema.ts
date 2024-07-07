@@ -11,14 +11,14 @@ export class MiembrosSchemas {
         .min(10000000, {
           message: "El dni del miembro debe tener al menos 8 cifras",
         }),
-      asociacion_id: z
-        .string({
-          required_error: "Debe ingresar el id de la asociacion",
-          invalid_type_error: "El id de la asociacion debe ser un string",
-        })
-        .min(36, {
-          message: "El id de la asociacion debe tener al menos 36 caracteres",
-        }),
+      // asociacion_id: z
+      //   .string({
+      //     required_error: "Debe ingresar el id de la asociacion",
+      //     invalid_type_error: "El id de la asociacion debe ser un string",
+      //   })
+      //   .min(36, {
+      //     message: "El id de la asociacion debe tener al menos 36 caracteres",
+      //   }),
       nombre: z
         .string({
           required_error: "Debe ingresar el nombre del miembro",
