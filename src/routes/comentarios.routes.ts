@@ -22,7 +22,10 @@ router.post(
   ComentariosController.registrarComentarioLv3
 );
 
-router.post("/borrar");
+router.post("/borrar/:comentario_id", 
+  Validator.validateAuth,
+  ComentariosController.borrarComentario
+);
 
 router.get(
   "/listar/:idpublicacion",

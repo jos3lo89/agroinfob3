@@ -74,4 +74,15 @@ export class ComentariosController {
       return res.status(400).json({ message: [error.message] });
     }
   }
+
+  public static async borrarComentario(req: Request, res: Response) {
+    try {
+      const { comentario_id } = req.params;
+      await ComentariosModel.borrarComentario(comentario_id);
+      res.sendStatus(200);
+    } catch (error: any) {
+      console.log(error.message);
+      return res.status(400).json({ message: [error.message] });
+    }
+  }
 }

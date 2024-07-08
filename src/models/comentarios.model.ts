@@ -64,20 +64,44 @@ export class ComentariosModel {
       const comentarios = await prisma.comentarios.findMany({
         where: { nivel: "primario", publicacion_id: idpublicacion },
         include: {
+          usuario: true, // Incluir información del usuario
           hijo_comentario: {
             include: {
+              usuario: true, // Incluir información del usuario en los subcomentarios
               hijo_comentario: {
                 include: {
-                  hijo_comentario: true,
+                  usuario: true, // Incluir información del usuario en los sub-subcomentarios
+                  hijo_comentario: {
+                    include: {
+                      usuario: true, // Incluir información del usuario en los sub-sub-subcomentarios
+                    },
+                  },
                 },
               },
             },
           },
         },
+        orderBy: {
+          fecha_creacion: "desc", // Ordenar por fecha de creación en orden descendente
+        },
       });
       return comentarios;
     } catch (error: any) {
-      throw new Error("No se oudo listar los comentarios");
+      throw new Error("No se pudo listar los comentarios");
+    }
+  }
+
+  public static async borrarComentario(comentario_id: string) {
+    try {
+      const comentario = await prisma.comentarios.delete({
+        where: {
+          id: comentario_id,
+        },
+      });
+
+      return comentario;
+    } catch (error: any) {
+      throw new Error("No se ha borrado el comentario");
     }
   }
 }
