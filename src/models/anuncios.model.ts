@@ -92,6 +92,7 @@ export class AnunciosModel {
     try {
       const anunciosList = await prisma.anuncios.findMany({
         where: {
+          estado: "publico",
           asociacion: {
             nombre,
           },
@@ -134,15 +135,13 @@ export class AnunciosModel {
 
   public static async listarAnunciosAsoc(id: string) {
     try {
-      
       const anuncios = await prisma.anuncios.findMany({
         where: {
           asociacion_id: id,
         },
       });
-  
-      return anuncios;
 
+      return anuncios;
     } catch (error: any) {
       throw new Error("No se pudo listar los anuncios");
     }

@@ -10,6 +10,7 @@ import miembrosRouter from "./routes/miembros.routes";
 import anunciosRouter from "./routes/anuncios.routes";
 import reunionesRouter from "./routes/reuniones.routes";
 import comentariosRouter from "./routes/comentarios.routes";
+import reaccionRouter from "./routes/reaccion.routes";
 
 const app = express();
 
@@ -35,5 +36,5 @@ app.use("/api/miembro", miembrosRouter);
 app.use("/api/anuncios", anunciosRouter);
 app.use("/api/reuniones", reunionesRouter);
 app.use("/api/comentarios", comentariosRouter);
-
+app.use("/api/reaccion", reaccionRouter);
 export default app;

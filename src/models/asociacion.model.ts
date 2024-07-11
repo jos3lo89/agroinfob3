@@ -269,6 +269,7 @@ export class AsociacionModel {
       const publicaciones = await prisma.publicaciones.findMany({
         where: {
           asociacion_id: asocFound.id,
+          estado: "publico",
         },
       });
 

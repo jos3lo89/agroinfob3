@@ -49,16 +49,16 @@ export class ReunionesController {
     try {
       const { iduser, estado } = req.params;
 
-      // console.log("id user->",iduser)
-      // console.log("id reu->",idreunion);
+      console.log("id miembro->", iduser);
+      console.log("id estado->", estado);
 
       if (estado !== "presente" && estado !== "falta") {
         throw new Error("Estado no valido");
       }
 
-      await ReunionesModel.llamarListaReuniones(iduser, estado);
+      const asis = await ReunionesModel.llamarListaReuniones(iduser, estado);
 
-      res.sendStatus(200);
+      res.status(200).json({ asis });
     } catch (error: any) {
       console.log(error.message);
       res.status(400).json({ message: [error.message] });
@@ -111,7 +111,11 @@ export class ReunionesController {
         Estado: miembro.estado,
       }));
 
-      const pdfKit = new PdfKit(columns, formattedMiembros, "Lista de asistentes");
+      const pdfKit = new PdfKit(
+        columns,
+        formattedMiembros,
+        "Lista de asistentes"
+      );
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", "inline; filename=miembros.pdf");
       pdfKit.buildpdf(
