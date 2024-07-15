@@ -18,10 +18,14 @@ export class Validator {
       }
 
       if (!config.jwtSecret) {
-        throw new Error("No se ha configurado el secreto de JWT");
+        throw new Error("No se ha encontro la clave secreta de JWT");
       }
 
       const decoded = Jwt.verifyToken(token) as Decoded;
+
+      if (!decoded) {
+        throw new Error("token no valido");
+      }
 
       req.user = decoded;
       next();
